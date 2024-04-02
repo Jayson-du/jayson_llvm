@@ -4,6 +4,8 @@
 #include "llvm/Support/DataTypes.h"
 #include <memory>
 
-
+/// 在此处获取ZPU寄存器枚举符号
+#define GET_REGINFO_ENUM
+#include "ZPUGenRegisterInfo.inc"
 
 #endif

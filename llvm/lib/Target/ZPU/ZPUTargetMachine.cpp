@@ -51,22 +51,22 @@ static Reloc::Model getEffectiveRelocModel(bool JIT,
   return *RM;
 }
 
-
 ZPUTargetMachine::ZPUTargetMachine(const Target &T, const Triple &TT,
-                                     StringRef CPU, StringRef FS,
-                                     const TargetOptions &Options,
-                                     std::optional<Reloc::Model> RM,
-                                     std::optional<CodeModel::Model> CM,
-                                     CodeGenOpt::Level OL, bool JIT,
-                                     bool isLittle)
+                                   StringRef CPU, StringRef FS,
+                                   const TargetOptions &Options,
+                                   std::optional<Reloc::Model> RM,
+                                   std::optional<CodeModel::Model> CM,
+                                   CodeGenOpt::Level OL, bool JIT,
+                                   bool isLittle)
     : LLVMTargetMachine(T, computeDataLayout(TT, CPU, Options, isLittle), TT,
                         CPU, FS, Options, getEffectiveRelocModel(JIT, RM),
                         getEffectiveCodeModel(CM, CodeModel::Small), OL) {
-  std::cout << "****" << std::endl;
-  std::cout << "This is a llvm backend create by dute" << std::endl;
-  std::cout << "ZPU (32-bit big endian)" << std::endl;
-  std::cout << "****" << std::endl;
-}
+  /// std::cout << "****" << std::endl;
+  /// std::cout << "This is a llvm backend create by dute" << std::endl;
+  /// std::cout << "ZPU (32-bit big endian)" << std::endl;
+  /// std::cout << "****" << std::endl;
 
+  initAsmInfo();
+}
 
 ZPUTargetMachine::~ZPUTargetMachine() = default;
