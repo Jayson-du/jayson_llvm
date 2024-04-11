@@ -66,7 +66,7 @@ ZPUTargetMachine::ZPUTargetMachine(const Target &T, const Triple &TT,
   /// std::cout << "ZPU (32-bit big endian)" << std::endl;
   /// std::cout << "****" << std::endl;
 
-  initAsmInfo();
+  /// initAsmInfo();
 }
 
 ZPUTargetMachine::~ZPUTargetMachine() = default;

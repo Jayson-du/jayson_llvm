@@ -6,6 +6,6 @@
 
 /// 在此处获取ZPU寄存器枚举符号
 #define GET_REGINFO_ENUM
-#include "ZPUGenRegisterInfo.inc"
+/// #include "ZPUGenRegisterInfo.inc"
 
 #endif

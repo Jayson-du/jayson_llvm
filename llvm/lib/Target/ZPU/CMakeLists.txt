@@ -8,6 +8,7 @@ add_public_tablegen_target(ZPUCommonTableGen)
 
 add_llvm_target(ZPUCodeGen
   ZPUTargetMachine.cpp
+  ZPUSubtarget.cpp
 
   LINK_COMPONENTS
   Analysis
