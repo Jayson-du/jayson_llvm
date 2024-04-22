@@ -3,6 +3,11 @@
 
 namespace llvm {
 
-}
+class ZPUTargetMachine;
+class FunctionPass;
+
+FunctionPass *createZPUISelDag()
+
+} // namespace llvm
 
 #endif
