@@ -72,7 +72,7 @@ def : InstAlias<"ret", (JALR X0, X1, 0), 4>;
 
 /// 定义伪指令PseudoRET
 /// PseudoInstExpansion<(JALR X0, X1, 0)表示伪指令PseudoRET实际对应的指令为JALR X0, X1, 0
-/// let Pattern = [(MyRISCVRetFlag)];表示SDNode节点为MyRISCVRetFlag时会匹配到该伪指令
+/// let Pattern = [(ZPURetFlag)];表示SDNode节点为ZPURetFlag时会匹配到该伪指令
 /// let isPseudo = 1;表示该指令是伪指令。
 /// let isReturn = 1;表示该指令会导致从函数返回
 /// let isTerminator = 1;表示该指令必须作为基本块的最后一条指令。

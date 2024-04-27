@@ -1,37 +1,67 @@
-#include "ZPUMCTargetDesc.h"
 #include "TargetInfo/ZPUTargetInfo.h"
-
-#include "llvm/MC/MCCodeEmitter.h"
-#include "llvm/MC/MCELFStreamer.h"
-#include "llvm/MC/MCInstrAnalysis.h"
+#include "ZPUInstPrinter.h"
+#include "ZPUMCAsmInfo.h"
+#include "ZPUMCTargetDesc.h"
 #include "llvm/MC/MCInstrInfo.h"
-#include "llvm/MC/MCObjectWriter.h"
 #include "llvm/MC/MCRegisterInfo.h"
 #include "llvm/MC/MCSubtargetInfo.h"
-#include "llvm/MC/MCSymbol.h"
-#include "llvm/MC/MachineLocation.h"
 #include "llvm/MC/TargetRegistry.h"
-#include "llvm/Support/ErrorHandling.h"
-#include "llvm/Support/FormattedStream.h"
-#include "llvm/TargetParser/Triple.h"
+
+#define GET_INSTRINFO_MC_DESC
+#include "ZPUGenInstrInfo.inc"
+
+#define GET_REGINFO_MC_DESC
+#include "ZPUGenRegisterInfo.inc"
+
+#define GET_SUBTARGETINFO_MC_DESC
+#include "ZPUGenSubtargetInfo.inc"
 
 using namespace llvm;
 
-#define GET_REGINFO_MC_DESC
-/// #include "ZPUGenRegisterInfo.inc"
+namespace {
 
-/// @brief 注册ZPU寄存器信息的回调函数
-/// @param TT
-/// @return 含有指定架构的寄存器信息
-/// static MCRegisterInfo *createZPURegisterInfo(const Triple &TT) {
-///   MCRegisterInfo *X = new MCRegisterInfo();
-///   InitZPUMCRegisterInfo(X, ZPU::RA);
-///   return X;
-/// }
+MCInstrInfo *createZPUMCInstrInfo() {
+  MCInstrInfo *X = new MCInstrInfo();
+  InitZPUMCInstrInfo(X);
+  return X;
+}
 
-/// @brief 注册ZPU的目标格式信息
-extern "C" LLVM_EXTERNAL_VISIBILITY void LLVMInitializeZPUTargetMC() {
-  for (Target *target : {&getTheZPU0Target()}) {
-    /// 注册寄存器信息
+MCRegisterInfo *createZPUMCRegisterInfo(const Triple &TT) {
+  MCRegisterInfo *X = new MCRegisterInfo();
+  InitZPUMCRegisterInfo(X, ZPU::X1);
+  return X;
+}
+
+MCAsmInfo *createZPUMCAsmInfo(const MCRegisterInfo &MRI, const Triple &TT,
+                              const MCTargetOptions &Options) {
+  return new ZPUMCAsmInfo(TT);
+}
+
+MCSubtargetInfo *createZPUMCSubtargetInfo(const Triple &TT, StringRef CPU,
+                                          StringRef FS) {
+  if (CPU.empty()) {
+    assert(TT.isArch32Bit() && "Only RV32 is currently "
+                               "supported!");
+    CPU = "generic-zpu32";
   }
+
+  return createZPUMCSubtargetInfoImpl(TT, CPU, CPU, FS);
+}
+
+MCInstPrinter *createZPUMCInstPrinter(const Triple &T, unsigned SyntaxVariant,
+                                      const MCAsmInfo &MAI,
+                                      const MCInstrInfo &MII,
+                                      const MCRegisterInfo &MRI) {
+  return new ZPUInstPrinter(MAI, MII, MRI);
+}
+
+} // end anonymous namespace
+
+extern "C" LLVM_EXTERNAL_VISIBILITY void LLVMInitializeZPUTargetMC() {
+  Target &ZPU = getTheZPU0Target();
+  TargetRegistry::RegisterMCAsmInfo(ZPU, createZPUMCAsmInfo);
+  TargetRegistry::RegisterMCInstrInfo(ZPU, createZPUMCInstrInfo);
+  TargetRegistry::RegisterMCRegInfo(ZPU, createZPUMCRegisterInfo);
+  TargetRegistry::RegisterMCSubtargetInfo(ZPU, createZPUMCSubtargetInfo);
+  TargetRegistry::RegisterMCInstPrinter(ZPU, createZPUMCInstPrinter);
 }

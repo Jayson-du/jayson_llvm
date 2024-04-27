@@ -1,28 +1,41 @@
+add_llvm_component_group(ZPU HAS_JIT)
+
 set(LLVM_TARGET_DEFINITIONS ZPU.td)
 
-tablegen(LLVM ZPUGenAsmMatcher.inc)
-
-add_llvm_component_group(ZPU HAS_JIT)
+# 生成汇编发射器
+tablegen(LLVM ZPUGenAsmWriter.inc -gen-asm-writer)
+tablegen(LLVM ZPUGenCallingConv.inc -gen-callingconv)
+tablegen(LLVM ZPUGenDAGISel.inc -gen-dag-isel)
+tablegen(LLVM ZPUGenInstrInfo.inc -gen-instr-info)
+tablegen(LLVM ZPUGenMCPseudoLowering.inc -gen-pseudo-lowering)
+tablegen(LLVM ZPUGenRegisterInfo.inc -gen-register-info)
+tablegen(LLVM ZPUGenSubtargetInfo.inc -gen-subtarget)
 
 add_public_tablegen_target(ZPUCommonTableGen)
 
-add_llvm_target(ZPUCodeGen
+set(sources
   ZPUTargetMachine.cpp
+  ZPUISelDAGToDAG.cpp
+  ZPUAsmPrinter.cpp
   ZPUSubtarget.cpp
+  ZPUISelLowering.cpp
+  ZPUFrameLowering.cpp
+  ZPUInstrInfo.cpp
+  ZPURegisterInfo.cpp
+  ZPUMCInstLower.cpp
+)
 
+add_llvm_target(ZPUCodeGen ${sources}
   LINK_COMPONENTS
-  Analysis
   AsmPrinter
-  CodeGen
   Core
+  CodeGen
   MC
+  ZPUDesc
+  ZPUInfo
+  SelectionDAG
   Support
   Target
-  TargetParser
-  GlobalISel
-  SelectionDAG
-  ZPUInfo
-  ZPUDesc
 
   ADD_TO_COMPONENT
   ZPU

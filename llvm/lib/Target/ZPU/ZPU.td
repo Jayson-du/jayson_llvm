@@ -16,7 +16,7 @@ include "ZPUCallingConv.td"
 /// 定义支持的处理器类型,
 /// 第1个参数表示处理器名称
 /// 第2个参数表示处理的调度模型
-def : PRoecessorModel<"generic-zpu", NoSchedModel, []>;
+def : ProcessorModel<"generic-zpu", NoSchedModel, []>;
 
 /// 定义指令的全局属性, 每个目标后端都必须实例化抽象记录InstrInfo
 def ZPUInstrInfo : InstrInfo;

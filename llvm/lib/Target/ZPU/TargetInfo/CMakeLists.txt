@@ -3,7 +3,6 @@ add_llvm_component_library(LLVMZPUInfo
 
   LINK_COMPONENTS
   MC
-  Support
 
   ADD_TO_COMPONENT
   ZPU

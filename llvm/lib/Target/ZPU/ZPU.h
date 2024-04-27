@@ -6,7 +6,10 @@ namespace llvm {
 class ZPUTargetMachine;
 class FunctionPass;
 
-FunctionPass *createZPUISelDag()
+/// @brief 创建目标后端ZPU的指令选择的PASS
+/// @param TM
+/// @return FunctionPass*
+FunctionPass *createZPUISelDag(ZPUTargetMachine &TM);
 
 } // namespace llvm
 
