@@ -3,6 +3,7 @@ echo **********
 echo cmake build vs2019 x64
 echo **********
 
+set builderDir=%~dp0
 
 if not exist build (
    mkdir build
@@ -17,22 +18,32 @@ if exist CMakeCache.txt (
     rm CMakeCache.txt
 )
 
+:: -S: 指锟斤拷源锟斤拷锟斤拷锟斤拷路锟斤拷
+:: -B: 指锟斤拷锟斤拷锟斤拷锟斤拷目锟斤拷锟斤拷路锟斤拷
+:: -G: 使锟斤拷锟侥革拷SDK锟斤拷锟斤拷锟斤拷
+:: -A: 指锟斤拷平台
+:: -D: 锟斤拷锟捷诧拷锟斤拷锟斤拷CMakeLists.txt
+:: CMAKE_CONFIGURATION_TYPES: 指锟斤拷Release or Debug
+@REM cmake -B %builderDir%/build                            ^
+@REM       -G "Visual Studio 17 2022"                        ^
+@REM       -A x64 -DPLATFORM=Windows                         ^
+@REM       -DLLVM_TARGETS_TO_BUILD=ZPU                       ^
+@REM       -DCMAKE_CONFIGURATION_TYPES=Debug                 ^
+@REM       -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra"  ^
+@REM       -DCMAKE_INSTALL_PREFIX=D:/apps/llvm/              ^
+@REM       -DLLVM_PARALLEL_COMPILE_JOBS=8                    ^
+@REM       -DLLVM_TARGETS_TO_BUILD=ZPU                       ^
+@REM       -DLLVM_PARALLEL_LINK_JOBS=8                       ^
+@REM       -S %builderDir%/llvm
 
-set builderDir=%~dp0
-
-:: -S: 指定源码所在路径
-:: -B: 指定生成项目所在路径
-:: -G: 使用哪个SDK生成器
-:: -A: 指定平台
-:: -D: 传递参数给CMakeLists.txt
-:: CMAKE_CONFIGURATION_TYPES: 指定Release or Debug
 cmake -B %builderDir%/build                            ^
       -G "Visual Studio 17 2022"                        ^
       -A x64 -DPLATFORM=Windows                         ^
       -DCMAKE_CONFIGURATION_TYPES=Debug                 ^
-      -DLLVM_ENABLE_PROJECTS="clang;clang-tools-extra"  ^
+      -DLLVM_ENABLE_PROJECTS="clang"                    ^
       -DCMAKE_INSTALL_PREFIX=D:/apps/llvm/              ^
       -DLLVM_PARALLEL_COMPILE_JOBS=8                    ^
+      -DLLVM_TARGETS_TO_BUILD=ZPU                       ^
       -DLLVM_PARALLEL_LINK_JOBS=8                       ^
       -S %builderDir%/llvm
 
