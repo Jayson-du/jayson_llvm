@@ -1,6 +1,6 @@
+#include "ZPUTargetMachine.h"
 #include "TargetInfo/ZPUTargetInfo.h"
 #include "ZPU.h"
-#include "ZPUTargetMachine.h"
 
 #include "llvm/ADT/Optional.h"
 #include "llvm/CodeGen/TargetLoweringObjectFileImpl.h"
@@ -37,7 +37,12 @@ StringRef computeDataLayout(const Triple &TT) {
   return "e-m:e-p:32:32-i64:64-n32-s128";
 }
 
-Reloc::Model getEffectiveRelocModel(Optional<Reloc::Model> RM) { return *RM; }
+Reloc::Model getEffectiveRelocModel(bool JIT, Optional<Reloc::Model> RM) {
+  if (!RM.has_value() || JIT) {
+    return Reloc::Static;
+  }
+  return *RM;
+}
 
 ZPUTargetMachine::ZPUTargetMachine(const Target &T, const Triple &TT,
                                    StringRef CPU, StringRef FS,
@@ -47,7 +52,7 @@ ZPUTargetMachine::ZPUTargetMachine(const Target &T, const Triple &TT,
                                    CodeGenOpt::Level OL, bool JIT,
                                    bool isLittle)
     : LLVMTargetMachine(T, computeDataLayout(TT), TT, CPU, FS, Options,
-                        getEffectiveRelocModel(RM),
+                        getEffectiveRelocModel(JIT, RM),
                         getEffectiveCodeModel(CM, CodeModel::Small), OL),
       Subtarget(TT, CPU, CPU, FS, *this),
       TLOF(std::make_unique<TargetLoweringObjectFileELF>()) {
