@@ -36,21 +36,32 @@ if [ ${compile_op} = 'y' ] || [ ${compile_op} = 'Y' ]; then
 
   popd
 
-elif [ ${compile_op} = 'n' ] || [ ${compile_op} = 'N' ]; then
+else
   blue_log "**** will incremental compilation ****"
 
   pushd $path
 
   if [ -d "build" ]; then
-    cd $path/build
-    rm -f ./CMakeCache.txt
+    option "Whether need to delete origin build/CMakeCache.txt([y/n]):"
+    read del_origin_cmakecache
+
+    if [ ${del_origin_cmakecache} = 'y' ] || [ ${del_origin_cmakecache} = 'Y' ]; then
+      blue_log "**** will delete origin CMakeCache.txt ****"
+      rm -f ./CMakeCache.txt
+    else
+      blue_log "**** not delete origin CMakeCache.txt ****"
+    fi
   fi
+
+  cd $path/build
+
 
   cmake -DCMAKE_BUILD_TYPE=Debug            \
       -DLLVM_ENABLE_PROJECTS="clang"        \
       -DLLVM_OPTIMIZED_TABLEGEN=On          \
       -DLLVM_PARALLEL_COMPILE_JOBS=4        \
       -DLLVM_PARALLEL_LINK_JOBS=1           \
+      -DLLVM_TARGETS_TO_BUILD=ZPU           \
       -G "Ninja"                            \
       -S ${path}/llvm                       \
       -B ${path}/build
@@ -58,7 +69,4 @@ elif [ ${compile_op} = 'n' ] || [ ${compile_op} = 'N' ]; then
   time ninja -j 16
 
   popd
-
-else
-  fatal_log "**** error, unhandled character ****"
 fi
