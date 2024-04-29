@@ -48,12 +48,12 @@ SDValue ZPUTargetLowering::LowerFormalArguments(
 /// @param DL
 /// @param DAG
 /// @return SDValue
-SDValue ZPUTargetLowering::LowerReturn(SDValue Chain, CallingConv::ID CallConv,
-                                       bool IsVarArg,
-                                       const SmallVectorImpl<ISD::OutputArg> &Outs,
-                                       const SmallVectorImpl<SDValue> &OutVals,
-                                       const SDLoc &DL,
-                                       SelectionDAG &DAG) const {
+SDValue
+ZPUTargetLowering::LowerReturn(SDValue Chain, CallingConv::ID CallConv,
+                               bool IsVarArg,
+                               const SmallVectorImpl<ISD::OutputArg> &Outs,
+                               const SmallVectorImpl<SDValue> &OutVals,
+                               const SDLoc &DL, SelectionDAG &DAG) const {
   SmallVector<CCValAssign, 16> RVLocs;
 
   CCState CCInfo(CallConv, IsVarArg, DAG.getMachineFunction(), RVLocs,

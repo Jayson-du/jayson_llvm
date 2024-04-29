@@ -1,3 +1,5 @@
+/// TODO
+
 #ifndef LLVM_LIB_TARGET_ZPU_ZPUISELLOWERING_H
 #define LLVM_LIB_TARGET_ZPU_ZPUISELLOWERING_H
 
@@ -10,7 +12,9 @@ class ZPUTargetMachine;
 
 namespace ZPUISD {
 
+/// @brief: 指令ZPU自定义的NodeType(由ISD::NodeType拓展而来)
 enum NodeType {
+  /// 从ISD::NodeType枚举的最后一个值开始拓展
   FIRST_NUMBER = ISD::BUILTIN_OP_END,
 
   /// 定义目标后端ZPU特有的操作码(ZPUISD::RET_FLAG), 这意味着,
@@ -22,6 +26,7 @@ enum NodeType {
 
 } // namespace ZPUISD
 
+/// TODO
 class ZPUTargetLowering : public TargetLowering {
   const ZPUSubtarget &Subtarget;
 
@@ -65,5 +70,5 @@ public:
                               const SDLoc &DL,
                               SelectionDAG &DAG) const override;
 };
-}
+} // namespace llvm
 #endif

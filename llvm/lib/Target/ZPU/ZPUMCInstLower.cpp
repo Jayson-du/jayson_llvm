@@ -27,10 +27,17 @@ void ZPUMCInstLower::Lower(const MachineInstr *MI, MCInst &OutMI) const {
   }
 }
 
+/// @brief: 指令操作数降阶, 将MachineOperand降阶为MCOperand
+/// @param MO
+/// @param MCOp
+/// @return true
+/// @return false
+/// @remark tag1: 支持操作数为寄存器与立即数的降阶
 bool ZPUMCInstLower::LowerOperand(const MachineOperand &MO,
                                   MCOperand &MCOp) const {
   switch (MO.getType()) {
   case MachineOperand::MO_Register: {
+    /// 判断操作数是否是隐式的def, 如果是隐式Reg操作数
     if (MO.isImplicit()) {
       return false;
     }
