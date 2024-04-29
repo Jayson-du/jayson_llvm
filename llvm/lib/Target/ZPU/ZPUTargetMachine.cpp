@@ -27,6 +27,7 @@ public:
 
 private:
   ZPUTargetMachine &getZPUTargetMachine() const {
+    /// 转换位ZPUTargetMachine类型
     return getTM<ZPUTargetMachine>();
   }
 };

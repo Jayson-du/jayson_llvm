@@ -4,11 +4,23 @@ set(LLVM_TARGET_DEFINITIONS ZPU.td)
 
 # 生成汇编发射器
 tablegen(LLVM ZPUGenAsmWriter.inc -gen-asm-writer)
+
+# 生成调用约定
 tablegen(LLVM ZPUGenCallingConv.inc -gen-callingconv)
+
+# 生成自动指令选择相关描述
 tablegen(LLVM ZPUGenDAGISel.inc -gen-dag-isel)
+
+# 生成目标指令描述
 tablegen(LLVM ZPUGenInstrInfo.inc -gen-instr-info)
+
+# 生成伪指令下降实现
 tablegen(LLVM ZPUGenMCPseudoLowering.inc -gen-pseudo-lowering)
+
+# 生成目标寄存器和寄存器组描述
 tablegen(LLVM ZPUGenRegisterInfo.inc -gen-register-info)
+
+# 生成子目标相关信息
 tablegen(LLVM ZPUGenSubtargetInfo.inc -gen-subtarget)
 
 add_public_tablegen_target(ZPUCommonTableGen)
