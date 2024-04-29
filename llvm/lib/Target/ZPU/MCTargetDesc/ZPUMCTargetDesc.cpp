@@ -1,7 +1,7 @@
+#include "ZPUMCTargetDesc.h"
 #include "TargetInfo/ZPUTargetInfo.h"
 #include "ZPUInstPrinter.h"
 #include "ZPUMCAsmInfo.h"
-#include "ZPUMCTargetDesc.h"
 #include "llvm/MC/MCInstrInfo.h"
 #include "llvm/MC/MCRegisterInfo.h"
 #include "llvm/MC/MCSubtargetInfo.h"
@@ -42,7 +42,10 @@ MCSubtargetInfo *createZPUMCSubtargetInfo(const Triple &TT, StringRef CPU,
   if (CPU.empty()) {
     assert(TT.isArch32Bit() && "Only RV32 is currently "
                                "supported!");
-    CPU = "generic-zpu32";
+    /// 因为在ZPU.td中定义的处理请名称是"generic-zpu",
+    /// 所以在cpp文件中处理器的名称必须匹配,
+    /// 否则在"MCSubtargetInfo::getSchedModelForCPU"函数中会有错误信息提示
+    CPU = "generic-zpu";
   }
 
   return createZPUMCSubtargetInfoImpl(TT, CPU, CPU, FS);
