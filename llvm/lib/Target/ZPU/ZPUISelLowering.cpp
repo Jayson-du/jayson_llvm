@@ -1,5 +1,5 @@
-#include "ZPUISelLowering.h"
 #include "MCTargetDesc/ZPUMCTargetDesc.h"
+#include "ZPUISelLowering.h"
 #include "ZPUSubtarget.h"
 #include "ZPUTargetMachine.h"
 #include "llvm/CodeGen/CallingConvLower.h"
@@ -90,8 +90,12 @@ ZPUTargetLowering::LowerReturn(SDValue Chain, CallingConv::ID CallConv,
     RetOps.push_back(DAG.getRegister(VA.getLocReg(), VA.getLocVT()));
   }
 
+  /// TODO
+  /// 该节点的第1个操作数总是为chain-edge ?
   RetOps[0] = Chain;
 
+  /// TODO
+  /// 最后一个操作数可能是glue-edge
   if (Glue.getNode()) {
     RetOps.push_back(Glue);
   }
