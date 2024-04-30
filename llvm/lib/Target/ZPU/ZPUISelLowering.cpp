@@ -1,5 +1,5 @@
-#include "MCTargetDesc/ZPUMCTargetDesc.h"
 #include "ZPUISelLowering.h"
+#include "MCTargetDesc/ZPUMCTargetDesc.h"
 #include "ZPUSubtarget.h"
 #include "ZPUTargetMachine.h"
 #include "llvm/CodeGen/CallingConvLower.h"
@@ -14,6 +14,10 @@ ZPUTargetLowering::ZPUTargetLowering(ZPUTargetMachine &TM)
   computeRegisterProperties(Subtarget.getRegisterInfo());
 }
 
+/// @brief: 返回特定于目标的SDNode节点的名称
+/// @param Opcode
+/// @return const char*
+/// @remark tags1: 目前只处理"RET_FLAG"
 const char *ZPUTargetLowering::getTargetNodeName(unsigned Opcode) const {
   switch (Opcode) {
   case ZPUISD::RET_FLAG: {
@@ -25,17 +29,32 @@ const char *ZPUTargetLowering::getTargetNodeName(unsigned Opcode) const {
   }
 }
 
+/// @brief: 将函数参数转换为何种SDNode节点
+/// @param Chain
+/// @param CallConv
+/// @param IsVarArg
+/// @param Ins
+/// @param DL
+/// @param DAG
+/// @param InVals
+/// @return SDValue
 SDValue ZPUTargetLowering::LowerFormalArguments(
     SDValue Chain, CallingConv::ID CallConv, bool IsVarArg,
     const SmallVectorImpl<ISD::InputArg> &Ins, const SDLoc &DL,
     SelectionDAG &DAG, SmallVectorImpl<SDValue> &InVals) const {
   SmallVector<CCValAssign, 16> ArgLocs;
+
   MachineFunction &MF = DAG.getMachineFunction();
+
   CCState CCInfo(CallConv, IsVarArg, MF, ArgLocs, *DAG.getContext());
+
+  /// 分析参数值数组, CC_ZPU是一个回调函数, 在"ZPUGenCallingConv.inc"中实现
   CCInfo.AnalyzeFormalArguments(Ins, CC_ZPU);
+
   for (unsigned i = 0, e = ArgLocs.size(); i < e; ++i) {
     CCValAssign &VA = ArgLocs[i];
   }
+
   return Chain;
 }
 

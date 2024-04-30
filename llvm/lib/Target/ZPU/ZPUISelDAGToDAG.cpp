@@ -1,4 +1,5 @@
-/// @brief: DAG选择PASS, 继承关系为:
+/// @brief: 用于指令选择的PASS
+///         DAG选择PASS, 继承关系为:
 ///         PASS <- FunctionPass <- MachineFunctionPass <- SelectionDAGISel
 ///         <- ZPUDAGToDAGISel
 
@@ -11,6 +12,7 @@ using namespace llvm;
 
 namespace {
 
+/// @brief: ZPUDAGToDAGISel用于指令选择
 class ZPUDAGToDAGISel : public SelectionDAGISel {
 public:
   /// TODO
