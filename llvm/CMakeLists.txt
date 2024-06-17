@@ -105,6 +105,11 @@ Learn more about these options in our documentation at https://llvm.org/docs/CMa
 ")
 endif()
 
+# add jayson debug
+if (${LLVM_JAYSON_DEBUG})
+  add_definitions(-DLLVM_JAYSON_DEBUG=1)
+endif()
+
 # Set default build type for cmake's try_compile module.
 # CMake 3.17 or newer sets CMAKE_DEFAULT_BUILD_TYPE to one of the
 # items from CMAKE_CONFIGURATION_TYPES. Logic below can be further

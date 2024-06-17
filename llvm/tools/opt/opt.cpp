@@ -485,9 +485,16 @@ int main(int argc, char **argv) {
 
   LLVMContext Context;
 
+#if LLVM_JAYSON_DEBUG
+  // TODO: remove shouldForceLegacyPM().
+  bool UseNPM = (!EnableLegacyPassManager && !shouldForceLegacyPM()) ||
+                      PassPipeline.getNumOccurrences() > 0;
+  UseNPM = false;
+#else
   // TODO: remove shouldForceLegacyPM().
   const bool UseNPM = (!EnableLegacyPassManager && !shouldForceLegacyPM()) ||
                       PassPipeline.getNumOccurrences() > 0;
+#endif
 
   if (UseNPM && !PassList.empty()) {
     errs() << "The `opt -passname` syntax for the new pass manager is "

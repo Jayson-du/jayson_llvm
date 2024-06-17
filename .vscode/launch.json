@@ -1,0 +1,50 @@
+/// 调试llc
+/// {
+///   // Use IntelliSense to learn about possible attributes.
+///   // Hover to view descriptions of existing attributes.
+///   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+///   "version": "0.2.0",
+///   "configurations": [
+///     {
+///       "type": "cppdbg",
+///       "request": "launch",
+///       "name": "Launch Program",
+///       "cwd": "${workspaceFolder}",
+///       "program": "${workspaceFolder}/build/bin/llc",
+///       "args": [
+///         "-march=ZPU",
+///         "-filetype=asm",
+///         "${workspaceFolder}/build/bin/test.ll",
+///         "-o",
+///         "${workspaceFolder}/build/bin/test.s"
+///       ]
+///     }
+///   ]
+/// }
+/// 调试opt
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "cppdbg",
+      "request": "launch",
+      "name": "Launch Program",
+      "cwd": "${workspaceFolder}",
+      "program": "${workspaceFolder}/build/bin/opt",
+      "args": [
+        "--load",
+        // "-load-pass-plugin=",
+        "${workspaceFolder}/build/lib/LLVMThedawn.so",
+        // "--passes=thedawn",
+        "-thedawn",
+        "<",
+        "${workspaceFolder}/build/thedawn.bc",
+        ">",
+        "/dev/null"
+      ]
+    }
+  ]
+}
